@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Troubles with the head</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #333;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+        th, td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+        th {
+            background-color: #4CAF50;
+            color: white;
+            cursor: pointer;
+        }
+        th:hover {
+            background-color: #45a049;
+        }
+        tr:hover {
+            background-color: #f5f5f5;
+        }
+        .controls {
+            margin-bottom: 20px;
+            padding: 15px;
+            background-color: #e9ecef;
+            border-radius: 5px;
+        }
+        .control-group {
+            margin-bottom: 10px;
+        }
+        label {
+            font-weight: bold;
+            margin-right: 10px;
+        }
+        input, select {
+            padding: 5px;
+            border: 1px solid #ccc;
+            border-radius: 3px;
+        }
+        button {
+            padding: 8px 15px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 3px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+        .current-params {
+            background-color: #d4edda;
+            padding: 10px;
+            border-radius: 3px;
+            margin-bottom: 15px;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h1>🚗 Автопарк JAVA-разработчика 🏎</h1>
+
+    <div class="controls">
+        <form action="/cars" method="get">
+            <div class="control-group">
+                <label for="count">Количество машин:</label>
+                <input type="number" id="count" name="count" min="1"
+                       th:value="${count != null ? count : ''}"
+                       placeholder="Все (max 10)">
+            </div>
+
+            <div class="control-group">
+                <label for="sortBy">Сортировка по:</label>
+                <select id="sortBy" name="sortBy">
+                    <option value="">-- Без сортировки --</option>
+                    <option value="id" th:selected="${sortBy == 'id'}">ID</option>
+                    <option value="model" th:selected="${sortBy == 'model'}">Модель</option>
+                    <option value="price" th:selected="${sortBy == 'price'}">Цена</option>
+                    <option value="year" th:selected="${sortBy == 'year'}">Год</option>
+                </select>
+            </div>
+
+            <button type="submit">Применить</button>
+            <button type="button" onclick="location.href='/cars'">Сбросить</button>
+        </form>
+    </div>
+
+    <div class="current-params" th:if="${count != null or sortBy != null}">
+        <strong>Текущие параметры:</strong>
+        <span th:if="${count != null}">Количество: <strong th:text="${count}"></strong></span>
+        <span th:if="${sortBy != null}"> | Сортировка по: <strong th:text="${sortBy}"></strong></span>
+    </div>
+
+    <table>
+        <thead>
+        <tr>
+            <th>ID</th>
+            <th>Модель</th>
+            <th>Год выпуска</th>
+            <th>Цена, ₽</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="car : ${cars}">
+            <td th:text="${car.id}"></td>
+            <td th:text="${car.model}"></td>
+            <td th:text="${car.year}"></td>
+            <td th:text="${car.price}"></td>
+        </tr>
+        <tr th:if="${#lists.isEmpty(cars)}">
+            <td colspan="4" style="text-align: center;">Нет данных для отображения</td>
+        </tr>
+        </tbody>
+    </table>
+
+    <div style="text-align: center;">
+        <p>Всего отображено: <strong th:text="${#lists.size(cars)}"></strong> машин</p>
+        <p><small>Максимальное количество машин: 10</small></p>
+    </div>
+</div>
+</body>
+</html>

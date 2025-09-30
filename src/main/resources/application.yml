@@ -1,0 +1,25 @@
+spring:
+  application:
+    name: cars-app
+  datasource:
+    url: jdbc:postgresql://localhost:5432/postgres
+    username: postgres
+    password: 4589
+    driver-class-name: org.postgresql.Driver
+  jpa:
+    show-sql: true
+    hibernate:
+      ddl-auto: update
+
+server:
+  port: 8080
+
+app:
+  max-car: 10
+  enabled-sorts:
+    - id
+    - model
+    - year
+    - price
+
+
