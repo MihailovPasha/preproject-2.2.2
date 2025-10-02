@@ -12,13 +12,13 @@ import java.util.Comparator;
 import java.util.List;
 
 @Service
-public class CarServiceImp implements CarService {
+public class CarServiceImpl implements CarService {
 
     private final CarRepository carRepository;
     private final AppConfig config;
 
     @Autowired
-    public CarServiceImp(CarRepository carRepository, AppConfig config) {
+    public CarServiceImpl(CarRepository carRepository, AppConfig config) {
         this.carRepository = carRepository;
         this.config = config;
     }
@@ -40,6 +40,17 @@ public class CarServiceImp implements CarService {
         }
 
         return cars.stream().limit(carCount).toList();
+    }
+
+    public List<Car> getCarsByUserId(Long userId) {
+        if (userId != null) {
+            return carRepository.findCarByUserId(userId);
+        }
+        return carRepository.findAll();
+    }
+
+    public Car getCarById(Long id) {
+        return carRepository.findById(id).orElse(null);
     }
 
     private List<Car> sortCars(List<Car> cars, String sortBy) {
